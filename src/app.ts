@@ -18,6 +18,7 @@ import { Jwt } from './models/jwt';
 import indexRoute from './routes/index';
 import loginRoute from './routes/login';
 import apiRoute from './routes/api';
+import studentRoute from './routes/students';
 
 // Assign router to the express.Router() instance
 const router: Router = Router();
@@ -33,7 +34,7 @@ app.set('view engine', 'ejs');
 //uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname,'../public','favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json({ limit: '5m' }));
+app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
@@ -47,7 +48,7 @@ let connection: MySqlConnectionConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   multipleStatements: true,
-  debug: true
+  debug: false
 }
 
 let db = Knex({
@@ -93,8 +94,9 @@ let checkAuth = (req, res, next) => {
     });
 }
 
-app.use('/login', loginRoute);
+app.use('/students', checkAuth, studentRoute);
 app.use('/api', checkAuth, apiRoute);
+app.use('/login', loginRoute);
 app.use('/', indexRoute);
 
 //error handlers

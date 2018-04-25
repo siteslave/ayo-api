@@ -3,8 +3,8 @@ import * as jwt from 'jsonwebtoken';
 export class Jwt {
   private secretKey = process.env.SECRET_KEY;
 
-  sign(playload: any) {
-    let token = jwt.sign(playload, this.secretKey, {
+  sign(payload: any) {
+    let token = jwt.sign(payload, this.secretKey, {
       expiresIn: '1d'
     });
     return token;

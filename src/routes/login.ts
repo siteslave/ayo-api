@@ -26,8 +26,8 @@ router.post('/', async (req: Request, res: Response) => {
     if (rs.length) {
 
       let payload = {
-        fullname: rs[0].fullname,
-        username: username
+        fullname: rs[0].fullname
+        // username: username
       }
 
       let token = jwt.sign(payload);
