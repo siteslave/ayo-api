@@ -19,4 +19,9 @@ export class Hos {
       .where('hn', hn)  
       .orderBy('vstdate', 'desc');
   }
+
+  checkPatient(db: Knex, hn: any) {
+    return db('patient')
+      .where('hn', hn);
+  }
 }

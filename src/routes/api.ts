@@ -111,7 +111,7 @@ router.get('/students/:id', async (req: Request, res: Response) => {
 });
 // /api/drug-profile?hn=xxxxxxx
 router.get('/drug-profile', async (req: Request, res: Response) => {
-  let db = req.db;
+  let db = req.dbHos;
   let hn: any = req.query.hn;
 
   if (hn) {
