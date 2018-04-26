@@ -51,9 +51,33 @@ let connection: MySqlConnectionConfig = {
   debug: false
 }
 
+let hosConnection: MySqlConnectionConfig = {
+  host: process.env.HOS_HOST,
+  port: +process.env.HOS_PORT,
+  database: process.env.HOS_NAME,
+  user: process.env.HOS_USER,
+  password: process.env.HOS_PASSWORD,
+  multipleStatements: true,
+  debug: false
+}
+
 let db = Knex({
   client: 'mysql',
   connection: connection,
+  pool: {
+    min: 0,
+    max: 100,
+    afterCreate: (conn, done) => {
+      conn.query('SET NAMES utf8', (err) => {
+        done(err, conn);
+      });
+    }
+  },
+});
+
+let hosDb = Knex({
+  client: 'mysql',
+  connection: hosConnection,
   pool: {
     min: 0,
     max: 100,

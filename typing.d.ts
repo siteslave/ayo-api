@@ -4,7 +4,8 @@ declare global {
   namespace Express {
     export interface Request {
       db: Knex;
-      decoded: any
+      dbHos: Knex;
+      decoded: any;
     }
   }
 }
