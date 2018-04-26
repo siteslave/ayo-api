@@ -3,8 +3,11 @@ import * as express from 'express';
 import { Router, Request, Response } from 'express';
 
 import { Api } from '../models/api';
+import { Hos } from '../models/hos';
 
 const apiModel = new Api();
+const hosModel = new Hos();
+
 const router: Router = Router();
 
 router.get('/', (req: Request, res: Response) => {
@@ -104,6 +107,22 @@ router.get('/students/:id', async (req: Request, res: Response) => {
     }
   } else {
     res.send({ ok: false, error: 'Incorrect data!', code: HttpStatus.OK });
+  }
+});
+// /api/drug-profile?hn=xxxxxxx
+router.get('/drug-profile', async (req: Request, res: Response) => {
+  let db = req.db;
+  let hn: any = req.query.hn;
+
+  if (hn) {
+    try {
+      let rs: any = await hosModel.getDrugProfile(db, hn);
+      res.send({ ok: true, rows: rs, code: HttpStatus.OK });
+    } catch (error) {
+      res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
+    }
+  } else {
+    res.send({ ok: false, error: 'HN not found!', code: HttpStatus.OK });
   }
 });
 

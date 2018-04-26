@@ -19,6 +19,7 @@ import indexRoute from './routes/index';
 import loginRoute from './routes/login';
 import apiRoute from './routes/api';
 import studentRoute from './routes/students';
+import notifyRoute from './routes/notify';
 
 // Assign router to the express.Router() instance
 const router: Router = Router();
@@ -91,6 +92,7 @@ let hosDb = Knex({
 
 app.use((req, res, next) => {
   req.db = db;
+  req.dbHos = hosDb;
   next();
 });
 
@@ -118,8 +120,9 @@ let checkAuth = (req, res, next) => {
     });
 }
 
+app.use('/notify', notifyRoute);
 app.use('/students', checkAuth, studentRoute);
-app.use('/api', checkAuth, apiRoute);
+app.use('/api', apiRoute);
 app.use('/login', loginRoute);
 app.use('/', indexRoute);
 
