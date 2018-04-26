@@ -38,5 +38,11 @@ router.delete('/test/:id', (req: Request, res: Response) => {
   res.send({ ok: true, action: 'DELETE', id: req.params.id, code: HttpStatus.OK });
 });
 
+router.post('/notify/register', (req: Request, res: Response) => {
+  let cid = req.body.cid;
+  // db
+  res.send({ ok: true, hn: '123456', hospcode: 'xxxx', hospname: 'yyyyy', code: HttpStatus.OK });
+});
+
 
 export default router;
