@@ -110,6 +110,7 @@ let checkAuth = (req, res, next) => {
   jwt.verify(token)
     .then((decoded: any) => {
       req.decoded = decoded;
+      console.log(decoded);
       next();
     }, err => {
       return res.send({
@@ -122,7 +123,7 @@ let checkAuth = (req, res, next) => {
 
 app.use('/notify', notifyRoute);
 app.use('/students', checkAuth, studentRoute);
-app.use('/api', apiRoute);
+app.use('/api', checkAuth, apiRoute);
 app.use('/login', loginRoute);
 app.use('/', indexRoute);
 

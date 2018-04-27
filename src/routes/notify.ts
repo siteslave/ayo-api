@@ -15,15 +15,15 @@ router.post('/register', async (req: Request, res: Response) => {
 
   try {
     let rs: any = await hosModel.getPatient(dbHos, cid);
-    // let rsConfig: any = await hosModel.getSysConfig(dbHos);
+    let rsConfig: any = await hosModel.getSysConfig(dbHos);
 
     if (rs.length) {
       // res.send({ ok: true, hn: rs[0].hn, hospcode: rsConfig[0].hospitalcode, code: HttpStatus.OK });
       res.send({
         ok: true,
         hn: rs[0].hn,
-        hospcode: '123456',
-        hospname: 'โรงพยาบาลทดสอบ',
+        hospcode: rsConfig[0].hospitalcode,
+        hospname: rsConfig[0].hospitalname,
         code: HttpStatus.OK
       });
     } else {
@@ -45,9 +45,10 @@ router.post('/auth', async (req: Request, res: Response) => {
 
   try {
     let rs: any = await hosModel.checkPatient(dbHos, hn);
-    if (rs.length) {
+    if (rs[0].length) {
       let payload = {
-        hn: rs[0].hn
+        hn: rs[0][0].hn,
+        hospcode: rs[0][0].hospitalcode
       };
 
       let token = jwt.sign(payload);

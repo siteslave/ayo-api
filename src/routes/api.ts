@@ -110,14 +110,21 @@ router.get('/students/:id', async (req: Request, res: Response) => {
   }
 });
 // /api/drug-profile?hn=xxxxxxx
-router.get('/drug-profile', async (req: Request, res: Response) => {
+router.get('/drug-profiles', async (req: Request, res: Response) => {
   let db = req.dbHos;
-  let hn: any = req.query.hn;
+  let hn: any = req.decoded.hn;
+  let hospcode: any = req.decoded.hospcode;
 
   if (hn) {
     try {
-      let rs: any = await hosModel.getDrugProfile(db, hn);
-      res.send({ ok: true, rows: rs, code: HttpStatus.OK });
+      let rsHospcode: any = await hosModel.checkHospcode(db, hospcode);
+
+      if (rsHospcode.length) {
+        let rs: any = await hosModel.getDrugProfile(db, hn);
+        res.send({ ok: true, rows: rs, code: HttpStatus.OK });
+      } else {
+        res.send({ ok: false, error: 'ไม่มีสิทธิ์ใช้งานระบบ', code: HttpStatus.UNAUTHORIZED });
+      }
     } catch (error) {
       res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
     }
